@@ -1,16 +1,17 @@
 workspace 'cg-prj'
 configurations { 'Debug', 'Release' }
-location 'build'
 architecture 'x86_64'
 
 -- ENGINE --
 project 'engine'
-location 'build/engine'
+location './engine'
+targetdir 'build/bin/%{cfg.buildcfg}'
+objdir 'build/obj'
 files {
-    'engine/include/**.h',
-    'engine/src/**.cpp',
+    '%{prj.location}/include/**.h',
+    '%{prj.location}/src/**.cpp',
 }
-includedirs { 'engine/include' }
+includedirs { '%{prj.location}/include' }
 kind 'SharedLib'
 language 'C++'
 cppdialect 'C++20'
@@ -21,14 +22,16 @@ filter {}
 
 -- CLIENT --
 project 'client'
-location 'build/client'
+location './client'
+targetdir 'build/bin/%{cfg.buildcfg}'
+objdir 'build/obj'
 files {
-    'client/include/**.h',
-    'client/src/**.cpp',
+    '%{prj.location}/include/**.h',
+    '%{prj.location}/src/**.cpp',
 }
 includedirs {
     'engine/include',
-    'client/include',
+    '%{prj.location}/include',
 }
 links { 'engine', 'spdlog' }
 kind 'ConsoleApp'
@@ -39,6 +42,7 @@ filter 'system:macosx'
 buildoptions {
     '-isysroot ' .. '/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk',
 }
+filter {}
 -- MacPorts include
 includedirs {
     '/opt/local/include',
@@ -65,6 +69,7 @@ links {
     'glut',
     'freeimage',
 }
+filter {}
 -- CLIENT /windows --
 filter 'system:windows'
 defines { '_WINDOWS' }
@@ -74,7 +79,9 @@ filter {}
 filter { 'configurations:Debug' }
 defines { 'DEBUG' }
 symbols 'On'
+filter {}
 
 filter { 'configurations:Release' }
 defines { 'NDEBUG' }
 optimize 'On'
+filter {}
