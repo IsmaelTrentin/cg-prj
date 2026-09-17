@@ -14,7 +14,7 @@ includedirs { 'engine/include' }
 kind 'SharedLib'
 language 'C++'
 cppdialect 'C++20'
-
+-- ENGINE /windows --
 filter 'system:windows'
 defines { '_WINDOWS', 'GRAPHICS_ENGINE_EXPORTS' }
 filter {}
@@ -29,27 +29,35 @@ files {
 includedirs {
     'engine/include',
     'client/include',
-    'libs/spdlog/include',
 }
 links { 'engine', 'spdlog' }
 kind 'ConsoleApp'
 language 'C++'
 cppdialect 'C++20'
-
+-- CLIENT /macosx --
 filter 'system:macosx'
 buildoptions {
     '-isysroot ' .. '/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk',
 }
 -- MacPorts include
-includedirs { '/opt/local/include' }
+includedirs {
+    '/opt/local/include',
+    -- Workaround since fmt through MacPorts has a different header path (uses libfmtNN)
+    -- and doing /** is too time consuming
+    '/opt/local/include/*fmt*',
+}
 -- MacPorts lib
-libdirs { '/opt/local/lib' }
+libdirs {
+    '/opt/local/lib',
+    '/opt/local/lib/*fmt*',
+}
 links {
     'OpenGL.framework',
     'GLUT.framework',
     'freeimage',
+    'fmt',
 }
-
+-- CLIENT /linux --
 filter 'system:linux'
 links {
     'GL',
@@ -57,11 +65,12 @@ links {
     'glut',
     'freeimage',
 }
-
+-- CLIENT /windows --
 filter 'system:windows'
 defines { '_WINDOWS' }
 filter {}
 
+-- CONFIGS --
 filter { 'configurations:Debug' }
 defines { 'DEBUG' }
 symbols 'On'
