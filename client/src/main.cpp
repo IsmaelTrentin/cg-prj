@@ -55,10 +55,9 @@ int main(int argc, char *argv[]) {
 #include <GL/freeglut.h>
 #endif
 
-#include "spdlog/spdlog.h"
-
 #include <FreeImage.h>
 #include <glm/glm.hpp>
+#include <spdlog/spdlog.h>
 
 void display() {
     glClear(GL_COLOR_BUFFER_BIT);
