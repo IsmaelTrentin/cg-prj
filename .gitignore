@@ -1,4 +1,16 @@
-build
 .cache
+.conan2
 
+build
+deps
+bin
+compile_commands
+
+Makefile
 compile_commands.json
+conan
+
+**.sln
+**.slnx
+**.vcxproj
+**.vcxproj.user
