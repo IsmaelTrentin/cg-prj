@@ -1,3 +1,7 @@
+if os.isdir './deps' then
+    include 'deps/conandeps.premake5.lua'
+end
+
 workspace 'cg-prj'
 configurations { 'Debug', 'Release' }
 architecture 'x86_64'
@@ -33,42 +37,11 @@ includedirs {
     'engine/include',
     '%{prj.location}/include',
 }
-links { 'engine', 'spdlog' }
+links { 'engine' }
 kind 'ConsoleApp'
 language 'C++'
 cppdialect 'C++20'
 -- CLIENT /macosx --
-filter 'system:macosx'
-buildoptions {
-    '-isysroot ' .. '/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk',
-}
-filter {}
--- MacPorts include
-includedirs {
-    '/opt/local/include',
-    -- Workaround since fmt through MacPorts has a different header path (uses libfmtNN)
-    -- and doing /** is too time consuming
-    '/opt/local/include/*fmt*',
-}
--- MacPorts lib
-libdirs {
-    '/opt/local/lib',
-    '/opt/local/lib/*fmt*',
-}
-links {
-    'OpenGL.framework',
-    'GLUT.framework',
-    'freeimage',
-    'fmt',
-}
--- CLIENT /linux --
-filter 'system:linux'
-links {
-    'GL',
-    'GLU',
-    'glut',
-    'freeimage',
-}
 filter {}
 -- CLIENT /windows --
 filter 'system:windows'
@@ -85,3 +58,33 @@ filter { 'configurations:Release' }
 defines { 'NDEBUG' }
 optimize 'On'
 filter {}
+
+if os.isdir './deps' then
+    conan_setup 'release_x86_64'
+end
+
+-- CUSTOM ACTIONS --
+newaction {
+    trigger = 'install',
+    description = 'Install deps using conan',
+    execute = function()
+        if not os.execute 'conan' then
+            print 'conan missing. download at https://conan.io/downloads'
+            return
+        end
+
+        local commands = {
+            'conan profile detect',
+            'conan config install .conan',
+            'conan install . -of deps -b missing -pr cpp20',
+        }
+
+        for _, cmd in ipairs(commands) do
+            print('running: ' .. cmd)
+            if not os.execute(cmd) then
+                error('Command failed: ' .. cmd)
+            end
+        end
+    end,
+}
+

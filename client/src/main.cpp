@@ -48,29 +48,7 @@ int main(int argc, char *argv[]) {
 }
 */
 
-#define GL_SILENCE_DEPRECATION
-#ifdef __APPLE__
-#include <GLUT/glut.h>
-#else
-#include <GL/freeglut.h>
-#endif
-
-#include <FreeImage.h>
-#include <glm/glm.hpp>
 #include <spdlog/spdlog.h>
-
-void display() {
-    glClear(GL_COLOR_BUFFER_BIT);
-    glBegin(GL_TRIANGLES);
-    glColor3f(1, 0, 0);
-    glVertex2f(-0.5f, -0.5f);
-    glColor3f(0, 1, 0);
-    glVertex2f(0.5f, -0.5f);
-    glColor3f(0, 0, 1);
-    glVertex2f(0.0f, 0.5f);
-    glEnd();
-    glutSwapBuffers();
-}
 
 int main(int argc, char** argv) {
     spdlog::info("hello spdlog");
@@ -86,14 +64,8 @@ int main(int argc, char** argv) {
     // Init engine:
     Eng::Base& eng = Eng::Base::getInstance();
     eng.init();
-    glutInit(&argc, argv);
-    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
-    glutInitWindowSize(640, 480);
-    glutCreateWindow("OpenGL 1.x on macOS (premake5)");
-    glutDisplayFunc(display);
 
     eng.test();
-    glutMainLoop();
 
     // Release engine:
     eng.free();
