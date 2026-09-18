@@ -88,3 +88,29 @@ newaction {
     end,
 }
 
+newaction {
+    trigger = 'ecc:link',
+    description = 'Links compile_commands.json to root dir',
+    execute = function()
+        if not os.isdir 'compile_commands' then
+            if not os.execute 'premake5 ecc' then
+                print 'failed to run ecc action'
+                return
+            end
+        end
+
+        local ok = false
+        if os.host() == 'windows' then
+            ok =
+                os.execute 'New-Item -ItemType SymbolicLink -Path "compile_commands.json" -Target "compile_commandsdebug.json"'
+        else
+            ok = os.execute 'ln -s compile_commands/debug.json compile_commands.json'
+        end
+
+        if not ok then
+            print 'failed to create soft link'
+            return
+        end
+        print 'symlink created: compile_commands.json -> compile_commands/debug.json'
+    end,
+}
