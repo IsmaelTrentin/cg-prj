@@ -1,5 +1,16 @@
 [requires]
 spdlog/1.17.0
+opengl/system
+freeimage/3.18.0
+freeglut/3.8.0
+
+[options]
+freeimage/*:with_jpeg2000=False
+freeimage/*:with_raw=False
+freeimage/*:with_openexr=False
+freeimage/*:with_jxr=False
+freeimage/*:with_webp=False
+freeimage/*:with_tiff=False
 
 [generators]
 PremakeDeps
