@@ -114,3 +114,39 @@ newaction {
         print 'symlink created: compile_commands.json -> compile_commands/debug.json'
     end,
 }
+
+local function exists(path)
+    local ok, err, code = os.rename(path, path)
+    if ok then
+        return true
+    end
+    -- code 13 = EACCES (permission denied), meaning it exists but you can't rename it
+    if code == 13 then
+        return true
+    end
+    return false
+end
+newaction {
+    trigger = 'clean',
+    description = 'Cleans workspace',
+    execute = function()
+        local entries = {
+            '.conan2',
+            'build',
+            'compile_commands',
+            'compile_commands.json',
+        }
+        for _, entry in ipairs(entries) do
+            if exists(entry) then
+                os.execute('rm -r ' .. entry)
+                print('removed ' .. entry)
+            end
+        end
+    end,
+}
+
+newoption {
+    trigger = 'clean',
+    description = 'Choose a particular 3D API for rendering',
+    category = 'Build Options',
+}
