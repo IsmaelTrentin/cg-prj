@@ -2,3 +2,4 @@ include(default)
 
 [settings]
 compiler.cppstd=20
+freeimage/*:compiler.cppstd=17

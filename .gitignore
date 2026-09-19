@@ -10,7 +10,9 @@ Makefile
 compile_commands.json
 conan
 
+.vs
 **.sln
 **.slnx
 **.vcxproj
 **.vcxproj.user
+**.vcxproj.filters

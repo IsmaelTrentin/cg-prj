@@ -48,7 +48,43 @@ int main(int argc, char *argv[]) {
 }
 */
 
+// Minimal OpenGL + freeglut + FreeImage test: draws a FreeImage-made texture.
+#ifndef GL_BGRA // Windows gl.h is GL 1.1 only
+#define GL_BGRA 0x80E1
+#endif
+
+#ifdef _WIN32
+#define WIN32_LEAN_AND_MEAN
+#define NOMINMAX
+#include <windows.h>
+#endif
+
+#define GL_SILENCE_DEPRECATION // macOS: hide OpenGL deprecation warnings
+#include <GL/freeglut.h>
+#ifdef __APPLE__
+#include <OpenGL/gl.h>
+#else
+#include <GL/gl.h>
+#endif
+#include <FreeImage.h>
+
+#include <cstdio>
 #include <spdlog/spdlog.h>
+
+static void display() {
+    glClear(GL_COLOR_BUFFER_BIT);
+    glBegin(GL_QUADS);
+    glTexCoord2f(0, 0);
+    glVertex2f(-0.8f, -0.8f);
+    glTexCoord2f(1, 0);
+    glVertex2f(0.8f, -0.8f);
+    glTexCoord2f(1, 1);
+    glVertex2f(0.8f, 0.8f);
+    glTexCoord2f(0, 1);
+    glVertex2f(-0.8f, 0.8f);
+    glEnd();
+    glutSwapBuffers();
+}
 
 int main(int argc, char** argv) {
     spdlog::info("hello spdlog");
@@ -66,6 +102,34 @@ int main(int argc, char** argv) {
     eng.init();
 
     eng.test();
+    glutInit(&argc, argv);
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
+    glutCreateWindow("freeglut + FreeImage");
+    std::printf("GL: %s | FreeImage: %s\n", (const char*)glGetString(GL_VERSION),
+                FreeImage_GetVersion());
+
+    // FreeImage: build a 64x64 checkerboard (32-bit, stored as BGRA)
+    FIBITMAP* img = FreeImage_Allocate(64, 64, 32);
+    for (unsigned y = 0; y < 64; ++y)
+        for (unsigned x = 0; x < 64; ++x) {
+            BYTE v = ((x / 8 + y / 8) % 2) ? 255 : 40;
+            RGBQUAD c = {v, 0, (BYTE)(255 - v), 255}; // B, G, R, A
+            FreeImage_SetPixelColor(img, x, y, &c);
+        }
+
+    // OpenGL: upload it as a texture
+    GLuint tex;
+    glGenTextures(1, &tex);
+    glBindTexture(GL_TEXTURE_2D, tex);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 64, 64, 0, GL_BGRA, GL_UNSIGNED_BYTE,
+                 FreeImage_GetBits(img));
+    FreeImage_Unload(img);
+    glEnable(GL_TEXTURE_2D);
+
+    glutDisplayFunc(display);
+    glutMainLoop();
 
     // Release engine:
     eng.free();

@@ -41,11 +41,18 @@ links { 'engine' }
 kind 'ConsoleApp'
 language 'C++'
 cppdialect 'C++20'
--- CLIENT /macosx --
-filter {}
 -- CLIENT /windows --
 filter 'system:windows'
 defines { '_WINDOWS' }
+links { 'opengl32' }
+filter {}
+-- CLIENT /linux --
+filter 'system:linux'
+links { 'GL' }
+filter {}
+-- CLIENT /macosx --
+filter 'system:macosx'
+links { 'OpenGL.framework' }
 filter {}
 
 -- CONFIGS --
@@ -60,7 +67,7 @@ optimize 'On'
 filter {}
 
 if os.isdir './deps' then
-    conan_setup 'release_x86_64'
+    conan_setup()
 end
 
 -- CUSTOM ACTIONS --
