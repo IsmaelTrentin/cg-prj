@@ -9,7 +9,7 @@ class FreeglutCocoaConan(ConanFile):
     version = "3.8.0-cocoa"
     settings = "os", "arch", "compiler", "build_type"
     options = {"shared": [True, False], "fPIC": [True, False]}
-    default_options = {"shared": True, "fPIC": True}
+    default_options = {"shared": False, "fPIC": True}
 
     def validate(self):
         if self.settings.os != "Macos":
@@ -52,6 +52,6 @@ class FreeglutCocoaConan(ConanFile):
 
     def package_info(self):
         self.cpp_info.libs = ["glut"]
-        self.cpp_info.frameworks = ["Cocoa", "OpenGL"]
+        self.cpp_info.frameworks = ["Cocoa", "OpenGL", "CoreVideo"]
         if not self.options.shared:
             self.cpp_info.defines.append("FREEGLUT_STATIC")
