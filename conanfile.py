@@ -1,4 +1,5 @@
 from conan import ConanFile
+from conan.tools.cmake import CMakeToolchain
 
 
 class MyProject(ConanFile):
@@ -12,6 +13,7 @@ class MyProject(ConanFile):
         "freeimage/*:with_jxr": False,
         "freeimage/*:with_webp": False,
         "freeimage/*:with_tiff": False,
+        "freeglut/*:with_wayland": False,
     }
 
     def requirements(self):
