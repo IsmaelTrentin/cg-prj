@@ -1,5 +1,5 @@
-if os.isdir './deps' then
-    include 'deps/conandeps.premake5.lua'
+if os.isdir '.conan2/deps' then
+    include '.conan2/deps/conandeps.premake5.lua'
 end
 
 workspace 'cg-prj'
@@ -65,7 +65,7 @@ defines { 'NDEBUG' }
 optimize 'On'
 filter {}
 
-if os.isdir './deps' then
+if os.isdir '.conan2/deps' then
     if os.host() == 'windows' then
         conan_setup()
     else
@@ -73,92 +73,11 @@ if os.isdir './deps' then
     end
 end
 
+-- CUSTOM OPTIONS --
+include 'lua/options/log.lua'
+include 'lua/options/all.lua'
+
 -- CUSTOM ACTIONS --
-newaction {
-    trigger = 'install',
-    description = 'Install deps using conan',
-    execute = function()
-        if not os.execute 'conan' then
-            print 'conan missing. download at https://conan.io/downloads'
-            return
-        end
-
-        local commands = {
-            'conan profile detect',
-            'conan config install .conan',
-            'conan export .conan/recipies/freeglut-cocoa',
-            'conan install . -of deps -b missing -pr cpp20',
-        }
-
-        for _, cmd in ipairs(commands) do
-            print('running: ' .. cmd)
-            if not os.execute(cmd) then
-                error('Command failed: ' .. cmd)
-            end
-        end
-    end,
-}
-
-newaction {
-    trigger = 'ecc:link',
-    description = 'Links compile_commands.json to root dir',
-    execute = function()
-        if not os.isdir 'compile_commands' then
-            if not os.execute 'premake5 ecc' then
-                print 'failed to run ecc action'
-                return
-            end
-        end
-
-        local ok = false
-        if os.host() == 'windows' then
-            ok =
-                os.execute 'New-Item -ItemType SymbolicLink -Path "compile_commands.json" -Target "compile_commandsdebug.json"'
-        else
-            ok = os.execute 'ln -s compile_commands/debug.json compile_commands.json'
-        end
-
-        if not ok then
-            print 'failed to create soft link'
-            return
-        end
-        print 'symlink created: compile_commands.json -> compile_commands/debug.json'
-    end,
-}
-
-local function exists(path)
-    local ok, err, code = os.rename(path, path)
-    if ok then
-        return true
-    end
-    -- code 13 = EACCES (permission denied), meaning it exists but you can't rename it
-    if code == 13 then
-        return true
-    end
-    return false
-end
-newaction {
-    trigger = 'clean',
-    description = 'Cleans workspace',
-    execute = function()
-        local entries = {
-            '.conan2',
-            'build',
-            'deps',
-            'compile_commands',
-            'compile_commands.json',
-        }
-        for _, entry in ipairs(entries) do
-            if exists(entry) then
-                os.execute('rm -r ' .. entry)
-                print('removed ' .. entry)
-            end
-        end
-    end,
-}
-
-newoption {
-    trigger = 'clean',
-    description = 'Choose a particular 3D API for rendering',
-    category = 'Build Options',
-}
+include 'lua/actions/install.lua'
+include 'lua/actions/ecc:link.lua'
+include 'lua/actions/clean.lua'
