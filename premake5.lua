@@ -66,8 +66,11 @@ optimize 'On'
 filter {}
 
 if os.isdir './deps' then
-    -- conan_setup 'release_x86_64'
-    conan_setup()
+    if os.host() == 'windows' then
+        conan_setup()
+    else
+        conan_setup 'release_x86_64'
+    end
 end
 
 -- CUSTOM ACTIONS --
