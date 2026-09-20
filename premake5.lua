@@ -44,15 +44,14 @@ cppdialect 'C++20'
 -- CLIENT /windows --
 filter 'system:windows'
 defines { '_WINDOWS' }
-links { 'opengl32', 'freeglut' }
 filter {}
 -- CLIENT /linux --
 filter 'system:linux'
-links { 'GL', 'glut' }
+-- links { 'GL', 'glut' }
 filter {}
 -- CLIENT /macosx --
 filter 'system:macosx'
-links { 'OpenGL.framework', 'glut' }
+-- links { 'OpenGL.framework', 'glut' }
 filter {}
 
 -- CONFIGS --
@@ -67,8 +66,8 @@ optimize 'On'
 filter {}
 
 if os.isdir './deps' then
-    conan_setup 'release_x86_64'
-    -- conan_setup()
+    -- conan_setup 'release_x86_64'
+    conan_setup()
 end
 
 -- CUSTOM ACTIONS --
