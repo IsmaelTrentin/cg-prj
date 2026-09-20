@@ -44,15 +44,15 @@ cppdialect 'C++20'
 -- CLIENT /windows --
 filter 'system:windows'
 defines { '_WINDOWS' }
-links { 'opengl32' }
+links { 'opengl32', 'freeglut' }
 filter {}
 -- CLIENT /linux --
 filter 'system:linux'
-links { 'GL' }
+links { 'GL', 'glut' }
 filter {}
 -- CLIENT /macosx --
 filter 'system:macosx'
-links { 'OpenGL.framework' }
+links { 'OpenGL.framework', 'glut' }
 filter {}
 
 -- CONFIGS --
@@ -67,7 +67,8 @@ optimize 'On'
 filter {}
 
 if os.isdir './deps' then
-    conan_setup()
+    conan_setup 'release_x86_64'
+    -- conan_setup()
 end
 
 -- CUSTOM ACTIONS --
@@ -83,6 +84,7 @@ newaction {
         local commands = {
             'conan profile detect',
             'conan config install .conan',
+            'conan export .conan/recipies/freeglut-cocoa',
             'conan install . -of deps -b missing -pr cpp20',
         }
 
@@ -140,6 +142,7 @@ newaction {
         local entries = {
             '.conan2',
             'build',
+            'deps',
             'compile_commands',
             'compile_commands.json',
         }
