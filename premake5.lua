@@ -79,5 +79,5 @@ include 'lua/options/all.lua'
 
 -- CUSTOM ACTIONS --
 include 'lua/actions/install.lua'
-include 'lua/actions/ecc:link.lua'
+include 'lua/actions/ecc_link.lua'
 include 'lua/actions/clean.lua'

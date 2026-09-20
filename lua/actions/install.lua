@@ -30,7 +30,7 @@ newaction {
             if _OPTIONS[opt_log] then
                 print 'windows detected: getting also Debug deps'
             end
-            table.insert(install_commands, install_commands[0] .. ' -s build_type=Debug')
+            table.insert(install_commands, install_commands[1] .. ' -s build_type=Debug')
         end
 
         for _, cmd in ipairs(setup_commands) do
