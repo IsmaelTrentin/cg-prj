@@ -21,17 +21,9 @@ newaction {
             'conan config install .conan',
             'conan export .conan/recipies/freeglut-cocoa',
         }
-        local install_commands = {
-            'conan install . -of .conan2/deps -b missing -pr cpp20',
-        }
-        -- Windows has problems if deps get compiled as Release and we try to run Debug configuration.
-        -- We must therefore also have Debug compiled deps.
-        if os.host() == 'windows' then
-            if _OPTIONS[opt_log] then
-                print 'windows detected: getting also Debug deps'
-            end
-            table.insert(install_commands, install_commands[1] .. ' -s build_type=Debug')
-        end
+        local install_command = 'conan install . -of .conan2/deps -b missing -pr cpp20'
+        local install_debug_command = install_command .. ' -s build_type=Debug'
+        local install_release_command = install_command .. ' -s build_type=Release'
 
         for _, cmd in ipairs(setup_commands) do
             print('running: ' .. cmd)
@@ -39,11 +31,15 @@ newaction {
                 error('command failed: ' .. cmd)
             end
         end
-        for _, cmd in ipairs(install_commands) do
-            print('running: ' .. cmd)
-            if not os.execute(cmd) then
-                error('command failed: ' .. cmd)
-            end
+        print 'installing Debug deps...'
+        print('running: ' .. install_debug_command)
+        if not os.execute(install_debug_command) then
+            error('command failed: ' .. install_debug_command)
+        end
+        print 'installing Release deps...'
+        print('running: ' .. install_release_command)
+        if not os.execute(install_release_command) then
+            error('command failed: ' .. install_release_command)
         end
     end,
 }
