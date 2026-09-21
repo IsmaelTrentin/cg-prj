@@ -4,7 +4,7 @@ end
 
 workspace 'cg-prj'
 configurations { 'Debug', 'Release' }
-architecture 'x86_64'
+architecture(os.hostarch())
 
 -- ENGINE --
 project 'engine'
@@ -66,11 +66,7 @@ optimize 'On'
 filter {}
 
 if os.isdir '.conan2/deps' then
-    if os.host() == 'windows' then
-        conan_setup()
-    else
-        conan_setup 'release_x86_64'
-    end
+    conan_setup()
 end
 
 -- CUSTOM OPTIONS --
