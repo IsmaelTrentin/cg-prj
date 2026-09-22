@@ -7,12 +7,21 @@
  */
 
 //////////////
+// #DEFS //
+//////////////
+
+#define GLM_ENABLE_EXPERIMENTAL
+
+//////////////
 // #INCLUDE //
 //////////////
 
 // Library header:
 #include "engine.h"
-#include "glm/common.hpp"
+
+// Deps
+#include <glm/glm.hpp>
+#include <glm/gtx/string_cast.hpp>
 
 // C/C++:
 #include <iostream>
@@ -49,7 +58,6 @@ int main(int argc, char *argv[]) {
 }
 */
 
-#define GL_SILENCE_DEPRECATION // macOS: hide OpenGL deprecation warnings
 #include <GL/freeglut.h>
 #ifdef __APPLE__
 #include <OpenGL/gl.h>
