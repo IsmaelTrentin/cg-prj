@@ -6,10 +6,12 @@ end
 workspace 'cg-prj'
 configurations { 'Debug', 'Release' }
 architecture(os.hostarch())
+targetdir 'build/%{cfg.buildcfg}/bin' -- add this at workspace level
+objdir 'build/%{cfg.buildcfg}/obj/%{prj.name}'
 
 -- CONFIGS --
 filter { 'configurations:Debug' }
-defines { 'DEBUG' }
+defines { '_DEBUG' }
 symbols 'On'
 filter {}
 
@@ -35,8 +37,8 @@ filter {}
 -- ENGINE --
 project 'engine'
 location './engine'
-targetdir 'build/%{cfg.buildcfg}/%{prj.name}/bin'
-objdir 'build/%{cfg.buildcfg}/%{prj.name}/obj'
+-- targetdir 'build/%{cfg.buildcfg}/%{prj.name}/bin'
+-- objdir 'build/%{cfg.buildcfg}/%{prj.name}/obj'
 files {
     '%{prj.location}/include/**.h',
     '%{prj.location}/src/**.cpp',
@@ -57,8 +59,8 @@ end
 -- CLIENT --
 project 'client'
 location './client'
-targetdir 'build/%{cfg.buildcfg}/%{prj.name}/bin'
-objdir 'build/%{cfg.buildcfg}/%{prj.name}/obj'
+-- targetdir 'build/%{cfg.buildcfg}/%{prj.name}/bin'
+-- objdir 'build/%{cfg.buildcfg}/%{prj.name}/obj'
 files {
     '%{prj.location}/include/**.h',
     '%{prj.location}/src/**.cpp',
@@ -79,8 +81,8 @@ end
 -- TESTS --
 project 'test'
 location './test'
-targetdir 'build/%{cfg.buildcfg}/%{prj.name}/bin'
-objdir 'build/%{cfg.buildcfg}/%{prj.name}/obj'
+-- targetdir 'build/%{cfg.buildcfg}/%{prj.name}/bin'
+-- objdir 'build/%{cfg.buildcfg}/%{prj.name}/obj'
 files { '%{prj.location}/src/**.cpp' }
 includedirs {
     'engine/include',

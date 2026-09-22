@@ -24,7 +24,7 @@
  * @return error code (0 on success, error code otherwise)
  */
 int main(int argc, char* argv[]) {
-#ifdef DEBUG
+#ifdef _DEBUG
     spdlog::set_level(spdlog::level::debug);
 #endif
 

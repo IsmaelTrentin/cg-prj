@@ -9,7 +9,7 @@
 #pragma once
 
 // Lib info
-#ifdef DEBUG
+#ifdef _DEBUG
 #define LIB_NAME "My Graphics Engine v0.1a (debug)"
 #else
 #define LIB_NAME "My Graphics Engine v0.1a"

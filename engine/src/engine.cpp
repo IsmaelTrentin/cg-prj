@@ -18,22 +18,24 @@
  */
 struct Eng::Base::Reserved {
     Reserved()
-        : initFlag{false} {}
+        : initFlag{false} {
+        // since spdlog is statically linked, on windows we have an 'instance' for each use of the lib.
+        // Therefore we have 2 states for the log level that must be set independently.
+#ifdef _DEBUG
+        spdlog::set_level(spdlog::level::debug);
+#endif 
+    }
 
     bool initFlag;
 };
 
 ENG_API Eng::Base::Base()
     : reserved(std::make_unique<Eng::Base::Reserved>()) {
-#ifdef DEBUG
     spdlog::debug("[+] {} invoked", std::source_location::current().function_name());
-#endif
 }
 
 ENG_API Eng::Base::~Base() {
-#ifdef DEBUG
     spdlog::debug("[-] {} invoked", std::source_location::current().function_name());
-#endif
 }
 
 /**
