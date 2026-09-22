@@ -2,29 +2,19 @@
  * @file		engine.h
  * @brief	Graphics engine main include file
  *
- * @author	Achille Peternier (C) SUPSI [achille.peternier@supsi.ch] <<
- * change this to your group members
+ * @author Dennis Donofrio [dennis.donofrio@student.supsi.ch]
+ * @author Gianni Grasso   [gianni.grasso@student.supsi.ch]
+ * @author Ismael Trentin  [ismael.trentin@student.supsi.ch]
  */
 #pragma once
 
-//////////////
-// #INCLUDE //
-//////////////
-
-// C/C++:
-#include <memory>
-
-/////////////
-// VERSION //
-/////////////
-
-// Generic info:
-#ifdef _DEBUG
-#define LIB_NAME "My Graphics Engine v0.1a (debug)" ///< Library credits
+// Lib info
+#ifdef DEBUG
+#define LIB_NAME "My Graphics Engine v0.1a (debug)"
 #else
-#define LIB_NAME "My Graphics Engine v0.1a" ///< Library credits
+#define LIB_NAME "My Graphics Engine v0.1a"
 #endif
-#define LIB_VERSION 10 ///< Library version (divide by 10)
+#define LIB_VERSION 10
 
 // Export API:
 #ifdef _WINDOWS
@@ -41,55 +31,30 @@
 #define ENG_API
 #endif
 
-///////////////
-// NAMESPACE //
-///////////////
+#include <memory>
 
 namespace Eng {
-
-//////////////
-// #INCLUDE //
-//////////////
-
-// You can subinclude here other headers of your engine...
-
-///////////////////////
-// MAIN ENGINE CLASS //
-///////////////////////
 
 /**
  * @brief Base engine main class. This class is a singleton.
  */
 class ENG_API Base final {
-  //////////
-public: //
-        //////////
+public:
+    Base(Base const&) = delete;
+    ~Base();
 
-  // Const/dest:
-  Base(Base const &) = delete;
-  ~Base();
+    void operator=(Base const&) = delete;
 
-  // Operators:
-  void operator=(Base const &) = delete;
+    static Base& getInstance();
 
-  // Singleton:
-  static Base &getInstance();
+    bool init();
+    bool free();
 
-  // Init/free:
-  bool init();
-  bool free();
-  bool test();
+private:
+    struct Reserved;
+    std::unique_ptr<Reserved> reserved;
 
-  ///////////
-private: //
-         ///////////
-
-  // Reserved:
-  struct Reserved;
-  std::unique_ptr<Reserved> reserved;
-
-  // Const/dest:
-  Base();
+    Base();
 };
 
 }; // namespace Eng
