@@ -9,8 +9,8 @@ architecture(os.hostarch())
 -- ENGINE --
 project 'engine'
 location './engine'
-targetdir 'build/bin/%{cfg.buildcfg}'
-objdir 'build/obj'
+targetdir 'build/%{cfg.buildcfg}/%{prj.name}/bin'
+objdir 'build/%{cfg.buildcfg}/%{prj.name}/obj'
 files {
     '%{prj.location}/include/**.h',
     '%{prj.location}/src/**.cpp',
@@ -27,8 +27,8 @@ filter {}
 -- CLIENT --
 project 'client'
 location './client'
-targetdir 'build/bin/%{cfg.buildcfg}'
-objdir 'build/obj'
+targetdir 'build/%{cfg.buildcfg}/%{prj.name}/bin'
+objdir 'build/%{cfg.buildcfg}/%{prj.name}/obj'
 files {
     '%{prj.location}/include/**.h',
     '%{prj.location}/src/**.cpp',
