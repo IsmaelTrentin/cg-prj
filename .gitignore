@@ -6,6 +6,7 @@ build
 deps
 bin
 compile_commands
+docs
 
 Makefile
 compile_commands.json
