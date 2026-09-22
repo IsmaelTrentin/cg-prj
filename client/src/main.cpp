@@ -12,6 +12,7 @@
 
 // Library header:
 #include "engine.h"
+#include "glm/common.hpp"
 
 // C/C++:
 #include <iostream>
@@ -57,6 +58,7 @@ int main(int argc, char *argv[]) {
 #endif
 #include <FreeImage.h>
 #include <cstdio>
+#include <glm/glm.hpp>
 #include <spdlog/spdlog.h>
 
 // Minimal freeglut + OpenGL + FreeImage test.
@@ -153,6 +155,7 @@ int main(int argc, char** argv) {
     eng.init();
 
     eng.test();
+    spdlog::info("glm: {}", glm::abs(-1));
 
     FreeImage_Initialise();
 
