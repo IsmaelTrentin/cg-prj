@@ -84,3 +84,22 @@ premake5 docs
 # Neovim
 
 If you want to use neovim with `clangd` LSP, use this custom premake5 action to [export compile_commands.json](https://github.com/tarruda/premake-export-compile-commands) from the generated premake5 files.
+
+# Testing
+
+Unit testing is handled using [gtest](https://github.com/google/googletest).
+
+## Unix
+
+To run tests use:
+
+```bash
+premake5 test
+```
+
+If you need to pass specific gtest inline args, you unfortunately must call the test executable directly and pass the arguments.
+
+## Windows
+
+The premake command is not support. Use VS and run the `test` project.
+
