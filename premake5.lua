@@ -76,6 +76,25 @@ if os.isdir '.conan2/deps' then
     conan_setup()
 end
 
+-- TESTS --
+project 'test'
+location './test'
+targetdir 'build/%{cfg.buildcfg}/%{prj.name}/bin'
+objdir 'build/%{cfg.buildcfg}/%{prj.name}/obj'
+files { '%{prj.location}/src/**.cpp' }
+includedirs {
+    'engine/include',
+    'client/include',
+}
+links { 'engine', 'client' }
+kind 'ConsoleApp'
+language 'C++'
+cppdialect 'C++20'
+buildoptions { '-std=c++20' }
+if os.isdir '.conan2/deps' then
+    conan_setup()
+end
+
 -- CUSTOM OPTIONS --
 include 'lua/options/all.lua'
 
@@ -83,3 +102,4 @@ include 'lua/options/all.lua'
 include 'lua/actions/install.lua'
 include 'lua/actions/clean.lua'
 include 'lua/actions/docs.lua'
+include 'lua/actions/test.lua'

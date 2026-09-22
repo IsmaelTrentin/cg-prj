@@ -21,6 +21,7 @@ class MyProject(ConanFile):
         self.requires("opengl/system")
         self.requires("freeimage/3.18.0")
         self.requires("glm/1.0.3")
+        self.requires("gtest/1.18.0")
 
         if self.settings.os == "Macos":
             self.requires("freeglut/3.8.0-cocoa")
