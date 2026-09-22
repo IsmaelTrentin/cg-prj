@@ -1,10 +1,9 @@
 local util = require 'lua/util'
-local opt_log = require('lua/options/log').name
 local opt_all = require('lua/options/all').name
 
 local name = 'clean'
 local redirect = util.SILENT
-if _OPTIONS[opt_log] then
+if _OPTIONS['verbose'] then
     redirect = ''
 end
 
