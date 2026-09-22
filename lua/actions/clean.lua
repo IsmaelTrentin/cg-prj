@@ -29,12 +29,17 @@ newaction {
         end
         local entries = {
             'build',
+            'docs',
             'compile_commands',
             'compile_commands.json',
         }
 
         for _, v in ipairs(conan_entries) do
             table.insert(entries, v)
+        end
+
+        if not os.execute 'make clean' then
+            print 'failed to execute make clean'
         end
 
         for _, entry in ipairs(entries) do
