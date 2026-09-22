@@ -1,71 +1,44 @@
 /**
- * @file		engine.cpp
- * @brief	Graphics engine main file
+ * @file        engine.cpp
+ * @brief   Graphics engine main file
  *
- * @author	Achille Peternier (C) SUPSI [achille.peternier@supsi.ch] <<
- * change this to your group members
+ * @author Dennis Donofrio [dennis.donofrio@student.supsi.ch]
+ * @author Gianni Grasso   [gianni.grasso@student.supsi.ch]
+ * @author Ismael Trentin  [ismael.trentin@student.supsi.ch]
  */
 
-//////////////
-// #INCLUDE //
-//////////////
-
-// Main include:
 #include "engine.h"
 
-// C/C++:
-#include <iostream>
 #include <source_location>
-
-/////////////////////////
-// RESERVED STRUCTURES //
-/////////////////////////
+#include <spdlog/spdlog.h>
 
 /**
  * @brief Base class reserved structure (using PIMPL/Bridge design pattern
  * https://en.wikipedia.org/wiki/Opaque_pointer).
  */
 struct Eng::Base::Reserved {
-    // Flags:
-    bool initFlag;
-
-    /**
-     * Constructor.
-     */
     Reserved()
         : initFlag{false} {}
+
+    bool initFlag;
 };
 
-////////////////////////
-// BODY OF CLASS Base //
-////////////////////////
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/**
- * Constructor.
- */
 ENG_API Eng::Base::Base()
     : reserved(std::make_unique<Eng::Base::Reserved>()) {
-#ifdef _DEBUG
-    std::cout << "[+] " << std::source_location::current().function_name() << " invoked"
-              << std::endl;
+#ifdef DEBUG
+    spdlog::debug("[+] {} invoked", std::source_location::current().function_name());
 #endif
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/**
- * Destructor.
- */
 ENG_API Eng::Base::~Base() {
-#ifdef _DEBUG
-    std::cout << "[-] " << std::source_location::current().function_name() << " invoked"
-              << std::endl;
+#ifdef DEBUG
+    spdlog::debug("[-] {} invoked", std::source_location::current().function_name());
 #endif
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /**
  * Gets a reference to the (unique) singleton instance.
+ *
  * @return reference to singleton instance
  */
 Eng::Base ENG_API& Eng::Base::getInstance() {
@@ -73,16 +46,15 @@ Eng::Base ENG_API& Eng::Base::getInstance() {
     return instance;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 /**
  * Init internal components.
+ *
  * @return TF
  */
 bool ENG_API Eng::Base::init() {
     // Already initialized?
     if (reserved->initFlag) {
-        std::cout << "ERROR: engine already initialized" << std::endl;
+        spdlog::error("engine already initialized");
         return false;
     }
 
@@ -90,20 +62,20 @@ bool ENG_API Eng::Base::init() {
     // default settings...
 
     // Done:
-    std::cout << "[>] " << LIB_NAME << " initialized" << std::endl;
+    spdlog::debug("[>] {} initialized", LIB_NAME);
     reserved->initFlag = true;
     return true;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /**
  * Free internal components.
+ *
  * @return TF
  */
 bool ENG_API Eng::Base::free() {
     // Not initialized?
     if (!reserved->initFlag) {
-        std::cout << "ERROR: engine not initialized" << std::endl;
+        spdlog::error("engine not initialized");
         return false;
     }
 
@@ -111,11 +83,7 @@ bool ENG_API Eng::Base::free() {
     // third-party dependencies)...
 
     // Done:
-    std::cout << "[<] " << LIB_NAME << " deinitialized" << std::endl;
+    spdlog::debug("[<] {} deinitialized", LIB_NAME);
     reserved->initFlag = false;
-    return true;
-}
-
-bool ENG_API Eng::Base::test() {
     return true;
 }
