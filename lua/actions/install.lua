@@ -15,15 +15,20 @@ newaction {
             print 'conan missing or not found. download at https://conan.io/downloads or add to PATH'
             return
         end
+        if not util.exists './.conan2/profiles/default' then
+            if not os.execute('conan profile detect' .. redirect) then
+                error('command failed: ' .. 'conan profile detect')
+                return
+            end
+        end
 
         local setup_commands = {
-            'conan profile detect',
             'conan config install .conan',
             'conan export .conan/recipies/freeglut-cocoa',
         }
-        local install_command = 'conan install . -of .conan2/deps -b missing -pr cpp20'
-        local install_debug_command = install_command .. ' -s build_type=Debug'
-        local install_release_command = install_command .. ' -s build_type=Release'
+        local install_base_command = 'conan install . -of .conan2/deps -b missing -pr cpp20'
+        local install_debug_command = install_base_command .. ' -s build_type=Debug'
+        local install_release_command = install_base_command .. ' -s build_type=Release'
 
         for _, cmd in ipairs(setup_commands) do
             print('running: ' .. cmd)
