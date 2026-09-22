@@ -10,6 +10,7 @@ newaction {
         end
 
         os.execute 'make test'
-        os.execute './build/Debug/test/bin/test'
+        local fpath = path.join('.', 'build', 'Debug', 'bin', 'test')
+        os.execute(fpath)
     end,
 }
