@@ -1,9 +1,8 @@
 local util = require 'lua/util'
-local opt_log = require('lua/options/log').name
 
 local name = 'install'
 local redirect = util.SILENT
-if _OPTIONS[opt_log] then
+if _OPTIONS['verbose'] then
     redirect = ''
 end
 
