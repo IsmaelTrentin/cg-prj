@@ -7,11 +7,21 @@
  */
 
 //////////////
+// #DEFS //
+//////////////
+
+#define GLM_ENABLE_EXPERIMENTAL
+
+//////////////
 // #INCLUDE //
 //////////////
 
 // Library header:
 #include "engine.h"
+
+// Deps
+#include <glm/glm.hpp>
+#include <glm/gtx/string_cast.hpp>
 
 // C/C++:
 #include <iostream>
@@ -48,7 +58,6 @@ int main(int argc, char *argv[]) {
 }
 */
 
-#define GL_SILENCE_DEPRECATION // macOS: hide OpenGL deprecation warnings
 #include <GL/freeglut.h>
 #ifdef __APPLE__
 #include <OpenGL/gl.h>
@@ -57,6 +66,7 @@ int main(int argc, char *argv[]) {
 #endif
 #include <FreeImage.h>
 #include <cstdio>
+#include <glm/glm.hpp>
 #include <spdlog/spdlog.h>
 
 // Minimal freeglut + OpenGL + FreeImage test.
@@ -153,6 +163,7 @@ int main(int argc, char** argv) {
     eng.init();
 
     eng.test();
+    spdlog::info("glm: {}", glm::abs(-1));
 
     FreeImage_Initialise();
 
