@@ -63,7 +63,7 @@ make config=release
 
 ## MacOS
 
-Intel MacOS are supported by compiling `freeglut/3.8.0` with `-DFREEGLUT_COCOA=ON`, check [here](https://github.com/freeglut/freeglut/blob/master/README.macos) for more info. This is conveniently handled by conan while installing the dependencies. For ARM devices testing is yet to be done, thus categorizing them as unsupported.
+Intel MacOS are supported by compiling `freeglut/3.8.0` with `-DFREEGLUT_COCOA=ON`, check [here](https://github.com/freeglut/freeglut/blob/master/README.macos) for more info. This is conveniently handled by conan while installing the dependencies. For ARM devices, only Macs with M3s have been tested with successful outcomes. Remember that `freeglut` with Cocoa backend is an experimental feature.
 
 # Premake5 Custom Actions
 
