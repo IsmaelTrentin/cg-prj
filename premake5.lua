@@ -13,11 +13,13 @@ objdir 'build/%{cfg.buildcfg}/obj/%{prj.name}'
 filter { 'configurations:Debug' }
 defines { '_DEBUG' }
 symbols 'On'
+conan_setup('debug_' .. string.lower(os.hostarch()))
 filter {}
 
 filter { 'configurations:Release' }
 defines { 'NDEBUG' }
 optimize 'On'
+conan_setup('release_' .. string.lower(os.hostarch()))
 filter {}
 
 -- DEFINITIONS --
@@ -52,9 +54,6 @@ buildoptions { '-std=c++20' }
 filter 'system:windows'
 defines { '_WINDOWS', 'GRAPHICS_ENGINE_EXPORTS' }
 filter {}
-if os.isdir '.conan2/deps' then
-    conan_setup()
-end
 
 -- CLIENT --
 project 'client'
@@ -74,9 +73,6 @@ kind 'ConsoleApp'
 language 'C++'
 cppdialect 'C++20'
 buildoptions { '-std=c++20' }
-if os.isdir '.conan2/deps' then
-    conan_setup()
-end
 
 -- TESTS --
 project 'test'
@@ -93,9 +89,6 @@ kind 'ConsoleApp'
 language 'C++'
 cppdialect 'C++20'
 buildoptions { '-std=c++20' }
-if os.isdir '.conan2/deps' then
-    conan_setup()
-end
 
 -- CUSTOM OPTIONS --
 include 'lua/options/all.lua'
