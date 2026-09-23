@@ -101,5 +101,5 @@ If you need to pass specific gtest inline args, you unfortunately must call the 
 
 ## Windows
 
-The premake command is not support. Use VS and run the `test` project.
+The premake command is not supported. Use VS and run the `test` project.
 
