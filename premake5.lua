@@ -15,13 +15,17 @@ objdir 'build/%{cfg.buildcfg}/obj/%{prj.name}'
 filter { 'configurations:Debug' }
 defines { '_DEBUG' }
 symbols 'On'
-conan_setup('debug_' .. arch)
+if os.isdir '.conan2/deps' then
+    conan_setup('debug_' .. arch)
+end
 filter {}
 
 filter { 'configurations:Release' }
 defines { 'NDEBUG' }
 optimize 'On'
-conan_setup('release_' .. arch)
+if os.isdir '.conan2/deps' then
+    conan_setup('release_' .. arch)
+end
 filter {}
 
 ---- PROJECTS ----
